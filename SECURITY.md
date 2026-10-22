@@ -1,4 +1,4 @@
-# AccessLens AI security model
+# AccessBloom security model
 
 **The public demo is synthetic and needs no credentials. Real scanning and stored audit reports require a server-side owner token.** No token or API key belongs in the repository or browser source code.
 

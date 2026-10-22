@@ -4,7 +4,7 @@ import { join } from 'node:path';
 
 export function createStore(dataDir) {
   mkdirSync(dataDir,{recursive:true,mode:0o700});
-  const db = new DatabaseSync(join(dataDir,'accesslens.sqlite'));
+  const db = new DatabaseSync(join(dataDir,'accessbloom.sqlite'));
   db.exec(`PRAGMA journal_mode=WAL;
   CREATE TABLE IF NOT EXISTS reports (id TEXT PRIMARY KEY, url TEXT NOT NULL, hostname TEXT NOT NULL, created_at TEXT NOT NULL, data TEXT NOT NULL);
   CREATE TABLE IF NOT EXISTS reviews (report_id TEXT NOT NULL, issue_id TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'open', note TEXT NOT NULL DEFAULT '', updated_at TEXT NOT NULL, PRIMARY KEY (report_id, issue_id));

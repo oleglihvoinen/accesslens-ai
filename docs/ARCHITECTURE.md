@@ -1,4 +1,4 @@
-# AccessLens AI architecture
+# AccessBloom architecture
 
 ```mermaid
 flowchart LR
@@ -29,16 +29,16 @@ flowchart LR
 - `scripts/`: safe installation and opt-in publishing helpers
 
 ## Application routes
-- `/accesslens/` public demo workspace
-- `/accesslens/api/health` public status
-- `/accesslens/api/config` public feature flags only
-- `/accesslens/api/demo` clearly marked sample report
-- `/accesslens/api/scans` owner POST scan
-- `/accesslens/api/reports` owner GET history
-- `/accesslens/api/reports/:id` owner GET/DELETE
-- `/accesslens/api/reports/:id/issues/:issueId` owner PATCH human review
-- `/accesslens/api/reports/:id/screenshot` owner image
-- `/accesslens/api/reports/:id/export/:format` owner structured export
+- `/accessbloom/` public demo workspace
+- `/accessbloom/api/health` public status
+- `/accessbloom/api/config` public feature flags only
+- `/accessbloom/api/demo` clearly marked sample report
+- `/accessbloom/api/scans` owner POST scan
+- `/accessbloom/api/reports` owner GET history
+- `/accessbloom/api/reports/:id` owner GET/DELETE
+- `/accessbloom/api/reports/:id/issues/:issueId` owner PATCH human review
+- `/accessbloom/api/reports/:id/screenshot` owner image
+- `/accessbloom/api/reports/:id/export/:format` owner structured export
 
 ## Privacy and trust
 Public visitors do not receive owner reports. API tokens are entered by an operator and kept only in the tab's in-memory state. AI output is explicitly labeled as generated, and failure falls back to raw axe evidence. Manual review and assisted-technology testing remain necessary.

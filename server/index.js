@@ -12,7 +12,7 @@ const root=resolve(fileURLToPath(new URL('../public/',import.meta.url)));
 const dataDir=resolve(process.env.DATA_DIR||new URL('../data/',import.meta.url).pathname);
 const shotDir=join(dataDir,'screenshots');mkdirSync(shotDir,{recursive:true,mode:0o700});
 const store=createStore(dataDir);
-const base=(process.env.BASE_PATH||'/accesslens').replace(/\/$/,'');
+const base=(process.env.BASE_PATH||'/accessbloom').replace(/\/$/,'');
 const secret=process.env.SCAN_ACCESS_TOKEN||'';
 const allowed=parseAllowed(process.env.SCAN_ALLOWED_HOSTS||'');
 const maxPerHour=Number(process.env.MAX_SCAN_PER_HOUR||20);
@@ -64,5 +64,5 @@ const app=http.createServer(async(req,res)=>{
   }catch(e){const userErrors=/invalid|valid |approved|local |standard ports|shorter|not allowed|domain |URL/i.test(e.message);failure(res,userErrors?400:500,userErrors?e.message:`Request failed: ${String(e.message).slice(0,240)}`);}
 });
 const port=Number(process.env.PORT||4117), host=process.env.HOST||'127.0.0.1';
-app.listen(port,host,()=>console.log(`AccessLens AI listening on http://${host}:${port}${base}/`));
+app.listen(port,host,()=>console.log(`AccessBloom listening on http://${host}:${port}${base}/`));
 process.on('SIGTERM',()=>{app.close(()=>{store.close();process.exit(0);});});

@@ -1,5 +1,5 @@
 {
-  "name": "accesslens-ai",
+  "name": "accessbloom",
   "version": "1.0.0",
   "private": true,
   "description": "AI-assisted accessibility audit studio: Playwright, axe-core, multimodal AI, evidence and human review.",

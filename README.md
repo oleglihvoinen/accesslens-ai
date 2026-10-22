@@ -1,20 +1,20 @@
-# AccessLens AI
+# AccessBloom
 
-**Evidence-first accessibility intelligence · Product design × AI engineering**
+**AI-assisted accessibility insights for inclusive design · An independent product by Viktoriya Mikhaylova**
 
-AccessLens AI is a working full-stack portfolio application that brings together browser-based accessibility analysis, evidence-grounded multimodal AI suggestions, human review, and before/after comparisons. It includes a fully explorable synthetic sample report so portfolio visitors can try the experience without credentials.
+AccessBloom is a working full-stack portfolio application that brings together browser-based accessibility analysis, evidence-grounded multimodal AI suggestions, human review, and before/after comparisons. It includes a fully explorable synthetic sample report so portfolio visitors can try the experience without credentials.
 
 **Intended public URLs after operator deployment**
 
-- Interactive application: `https://vik.ooo/accesslens/`
-- Product design case study: `https://vik.ooo/case-studies/accesslens-ai/`
-- GitHub repository: `https://github.com/oleglihvoinen/accesslens-ai`
+- Interactive application: `https://vik.ooo/accessbloom/`
+- Product design case study: `https://vik.ooo/case-studies/accessbloom/`
+- GitHub repository (original URL retained): `https://github.com/oleglihvoinen/accesslens-ai`
 
-These are deployment targets, **not assertions that they are currently live**.
+The vik.ooo links above are deployment targets, **not assertions that they are currently live**. The source remains under its existing GitHub repository slug until separately renamed or transferred.
 
 ## Current verified status
 
-The source code, public interactive demonstration, SQLite persistence layer, review workflow, comparison model and export UI are implemented and covered by runnable tests. Real browser scans require installing npm dependencies and Playwright Chromium and permitting a domain. AI-generated content requires a valid API key; its live-provider behavior is not verified until configured. No remote GitHub upload or VPS deployment is implied by this package.
+The source code, public interactive demonstration, SQLite persistence layer, review workflow, comparison model and export UI are implemented and covered by runnable tests. Real browser scans require installing npm dependencies and Playwright Chromium and permitting a domain. AI-generated content requires a valid API key; its live-provider behavior is not verified until configured. This source has been published to GitHub, but VPS deployment has not been verified.
 
 ## Features
 
@@ -48,14 +48,14 @@ The application uses **axe-core's evidence** as the source of detected violation
 2. Install browser dependencies: `npx playwright install chromium` (on minimal Ubuntu also `sudo npx playwright install-deps chromium`).
 3. Copy `.env.example` to `.env`, choose a random owner token and your permitted scanning hosts, set `DATA_DIR=./data` for local development.
 4. In a shell, `set -a; source .env; set +a; npm start`.
-5. Visit `http://127.0.0.1:4117/accesslens/`. Public demo works even without configured OpenAI access.
+5. Visit `http://127.0.0.1:4117/accessbloom/`. Public demo works even without configured OpenAI access.
 6. Run `npm test` to execute the core + HTTP smoke tests.
 
 The `.env` file is excluded from Git. Do not paste your secret key into the web application or commit it to source control. Owner mode is intended for a single operator, not a production multi-tenant identity solution.
 
 ## Install on your Ubuntu VPS
 
-Existing portfolio context: React/Vite source at `/home/lihvool/viki`, built static files under `/home/lihvool/viki/dist`, and an existing PM2 `portfolio-ai` backend. AccessLens uses an independent service on loopback port `4117` so it does not change the running portfolio backend or existing portfolio content.
+Existing portfolio context: React/Vite source at `/home/lihvool/viki`, built static files under `/home/lihvool/viki/dist`, and an existing PM2 `portfolio-ai` backend. AccessBloom uses an independent service on loopback port `4117` so it does not change the running portfolio backend or existing portfolio content.
 
 Transfer/unzip this project to your VPS, then in its root:
 
@@ -63,12 +63,12 @@ Transfer/unzip this project to your VPS, then in its root:
 sudo bash scripts/deploy-ubuntu.sh
 ```
 
-The script installs to `/opt/accesslens-ai`, creates a limited-privilege `accesslens` service account, configures `/etc/accesslens/accesslens.env`, downloads Playwright Chromium, enables `systemd` service `accesslens-ai`, and writes `/etc/nginx/snippets/accesslens.conf`. **It does not edit your existing Nginx site configuration.** Inspect the generated files before deploying on a production VPS. `rsync`, `openssl`, Node/npm, and Chromium system dependencies are required.
+The script installs to `/opt/accessbloom`, creates a limited-privilege `accessbloom` service account, configures `/etc/accessbloom/accessbloom.env`, downloads Playwright Chromium, enables `systemd` service `accessbloom`, and writes `/etc/nginx/snippets/accessbloom.conf`. **It does not edit your existing Nginx site configuration.** Inspect the generated files before deploying on a production VPS. `rsync`, `openssl`, Node/npm, and Chromium system dependencies are required.
 
 Add this line **inside the existing `vik.ooo` HTTPS `server {}` block** before the SPA fallback in the appropriate Nginx vhost (often `/etc/nginx/sites-available/viki`):
 
 ```nginx
-include /etc/nginx/snippets/accesslens.conf;
+include /etc/nginx/snippets/accessbloom.conf;
 ```
 
 Then:
@@ -76,20 +76,20 @@ Then:
 ```bash
 sudo nginx -t
 sudo systemctl reload nginx
-sudo systemctl status accesslens-ai --no-pager
-curl -f https://vik.ooo/accesslens/api/health
+sudo systemctl status accessbloom --no-pager
+curl -f https://vik.ooo/accessbloom/api/health
 ```
 
-Check the site on both mobile and desktop. If your server currently uses a different vhost or frontend directory, adjust only the relevant path. Take a snapshot/backup before site edits. The service secret is in `/etc/accesslens/accesslens.env` (permissions `0600`), not the public code.
+Check the site on both mobile and desktop. If your server currently uses a different vhost or frontend directory, adjust only the relevant path. Take a snapshot/backup before site edits. The service secret is in `/etc/accessbloom/accessbloom.env` (permissions `0600`), not the public code.
 
 **Security prerequisite before running real scans:** browser automation that fetches user-provided URLs is an SSRF-sensitive workload. The code includes application-layer restrictions, but these do **not** eliminate DNS rebinding. Keep real scans owner-only and host-allowlisted, and enforce a container/network namespace or outbound firewall that blocks loopback, private networks, link-local metadata, etc. See [SECURITY.md](SECURITY.md). For full isolation, deploy the scanning worker in a separate network-restricted container; the provided single-service installer is a portfolio/single-operator starting point, not hardened SaaS multi-tenancy.
 
 ### Enable live AI
 
-Edit `/etc/accesslens/accesslens.env` and set `OPENAI_API_KEY` on the server. The API key never needs to be configured in React, JavaScript, Nginx, GitHub, or your visitor-facing portfolio. Then restart the service:
+Edit `/etc/accessbloom/accessbloom.env` and set `OPENAI_API_KEY` on the server. The API key never needs to be configured in React, JavaScript, Nginx, GitHub, or your visitor-facing portfolio. Then restart the service:
 
 ```bash
-sudo systemctl restart accesslens-ai
+sudo systemctl restart accessbloom
 ```
 
 OpenAI is used only when owner scanning is invoked; public sample reports contain authored illustrative explanations and do not call a live AI provider.
@@ -100,11 +100,11 @@ OpenAI is used only when owner scanning is invoked; public sample reports contai
 bash scripts/install-portfolio-case.sh /home/lihvool/viki
 ```
 
-This copies a **standalone case page** to the Vite `public/case-studies/accesslens-ai/` folder, builds the existing portfolio, and leaves its app routing and PM2 assistant unchanged. The case page then lives at `/case-studies/accesslens-ai/`, provided Nginx serves the Vite build from its configured location.
+This copies a **standalone case page** to the Vite `public/case-studies/accessbloom/` folder, builds the existing portfolio, and leaves its app routing and PM2 assistant unchanged. The case page then lives at `/case-studies/accessbloom/`, provided Nginx serves the Vite build from its configured location.
 
-To feature AccessLens on the existing React homepage, add the `accessLensProject` object from `portfolio-integration/featured-card.jsx` to **the actual featured-project array or grid in your current App.jsx**. This is intentionally not automated: the active portfolio component structure was not available in this session, and a blind rewrite could damage existing projects. Keep HaeSiivooja, Aura, CleanPeer and the portfolio AI assistant intact.
+To feature AccessBloom on the existing React homepage, add the `accessBloomProject` object from `portfolio-integration/featured-card.jsx` to **the actual featured-project array or grid in your current App.jsx**. This is intentionally not automated: the active portfolio component structure was not available in this session, and a blind rewrite could damage existing projects. Keep HaeSiivooja, Aura, CleanPeer and the portfolio AI assistant intact.
 
-### Publish as two public GitHub repositories
+### Publish to the existing GitHub repository
 
 Once GitHub CLI (`gh`) is authenticated with permission to write to `oleglihvoinen/accesslens-ai`:
 
@@ -130,7 +130,7 @@ This script targets only the `oleglihvoinen` repository.
 | GET | `/api/reports/:id/screenshot` | Owner |
 | GET | `/api/reports/:id/export/json` or `/csv` | Owner |
 
-Each API path is prefixed with `/accesslens` behind Nginx. Owner calls use `Authorization: Bearer <SCAN_ACCESS_TOKEN>`.
+Each API path is prefixed with `/accessbloom` behind Nginx. Owner calls use `Authorization: Bearer <SCAN_ACCESS_TOKEN>`.
 
 ## Evidence and AI limitations
 
